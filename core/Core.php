@@ -197,7 +197,8 @@ class Core
           // Finally update contact_id and status for newly created transmission
           // Note: we can't create and update contact before activating transmission owner
           $oContact->save();
-          $oTransmission->result_create($oContact->contact_id, 'contact_new', Result::TYPE_CONTACT, 'inbound');
+          $oRequest->application_id = DB::query_result('application', "SELECT application_id as application_id FROM application WHERE dialplan_id=". oDialplan['dialplan_id'] ." AND type='". $direction ."' AND program_id=" . oProgram->program_id, 'application_id');
+          $oTransmission->result_create($oContact->contact_id, 'contact_new', Result::TYPE_CONTACT, $oRequest->application_id);
         }
         $oTransmission->contact_id = $oContact->contact_id;
       }
